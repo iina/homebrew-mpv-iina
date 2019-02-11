@@ -12,7 +12,7 @@ class MpvIina < Formula
   depends_on "pkg-config" => :build
   depends_on "python" => :build
 
-  depends_on "ffmpeg"
+  depends_on "ffmpeg-iina"
   depends_on "jpeg"
   depends_on "libarchive"
   depends_on "libass"
