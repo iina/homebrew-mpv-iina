@@ -1,0 +1,12 @@
+diff --git a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
+index 1b1c8afc..992b0c72 100644
+--- a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
++++ b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
+@@ -114,6 +114,7 @@ module Superenv
+   def setup_build_environment(formula = nil)
+     generic_setup_build_environment(formula)
+     self["HOMEBREW_SDKROOT"] = effective_sysroot
++    ENV["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
+ 
+     # Filter out symbols known not to be defined since GNU Autotools can't
+     # reliably figure this out with Xcode 8 and above.
