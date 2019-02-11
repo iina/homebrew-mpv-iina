@@ -1,3 +1,6 @@
+# Last check with upstream: b99c1053f197ee0662e1b34664077784dd2d5432
+# https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
+
 class FfmpegIina < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"

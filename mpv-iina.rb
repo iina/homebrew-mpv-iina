@@ -1,3 +1,6 @@
+# Last check with upstream: fbe5f11471748ac696089a00a2c1396945de3cda
+# https://github.com/Homebrew/homebrew-core/blob/master/Formula/mpv.rb
+
 class MpvIina < Formula
   desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
