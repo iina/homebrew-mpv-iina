@@ -19,11 +19,9 @@ class FfmpegIina < Formula
   depends_on "libass"
   depends_on "libbluray"
   depends_on "libsoxr"
-  depends_on "libvorbis"
   depends_on "libvpx"
   depends_on "opencore-amr"
   depends_on "openjpeg"
-  depends_on "opus"
   depends_on "rtmpdump"
   depends_on "rubberband"
   depends_on "snappy"
@@ -47,11 +45,9 @@ class FfmpegIina < Formula
       --enable-gpl
       --enable-libaom
       --enable-libbluray
-      --enable-libopus
       --enable-librubberband
       --enable-libsnappy
       --enable-libtesseract
-      --enable-libvorbis
       --enable-libvpx
       --enable-libfontconfig
       --enable-libfreetype

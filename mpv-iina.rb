@@ -18,6 +18,7 @@ class MpvIina < Formula
   depends_on "libass"
   depends_on "little-cms2"
   depends_on "lua@5.1"
+  depends_on "libbluray"
 
   depends_on "mujs"
   depends_on "uchardet"
@@ -32,18 +33,16 @@ class MpvIina < Formula
 
     args = %W[
       --prefix=#{prefix}
-      --enable-html-build
       --enable-javascript
       --enable-libmpv-shared
       --enable-lua
       --enable-libarchive
       --enable-uchardet
+      --enable-libbluray
       --confdir=#{etc}/mpv
       --datadir=#{pkgshare}
       --mandir=#{man}
       --docdir=#{doc}
-      --enable-zsh-comp
-      --zshdir=#{zsh_completion}
     ]
 
     system "./bootstrap.py"

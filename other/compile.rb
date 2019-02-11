@@ -19,7 +19,9 @@ system "git apply #{current_dir}/#{homebrew_patch}"
 @resolves = {}
 @checked = {}
 
+@count = 0
 def parse_deps(package)
+  @count += 1
   deps = "#{`brew deps #{package}`}".split("\n")
   # if we build harfbuzz before python, python will complain
   # "$MACOSX_DEPLOYMENT_TARGET mismatch"
@@ -40,6 +42,7 @@ def install(package)
 end
 
 parse_deps "mpv-iina"
+print "Number of packages to be complied: #{@count}\n"
 
 while @remining["mpv-iina"] != 0 do
   resolved = @remining.key(0)
