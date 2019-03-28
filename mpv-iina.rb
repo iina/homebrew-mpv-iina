@@ -25,7 +25,7 @@ class MpvIina < Formula
 
   depends_on "mujs"
   depends_on "uchardet"
-  depends_on "vapoursynth"
+  # depends_on "vapoursynth"
   depends_on "youtube-dl"
 
   def install
