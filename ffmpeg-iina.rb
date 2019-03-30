@@ -8,7 +8,7 @@ class FfmpegIina < Formula
   sha256 "373749824dfd334d84e55dff406729edfd1606575ee44dd485d97d45ea4d2d86"
   head "https://github.com/FFmpeg/FFmpeg.git"
 
-  keg_only "this formula is only used for building IINA, not recommand for daily use"
+  keg_only "This formula is intended to only be used for building IINA. It is not recommended for daily use."
 
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
