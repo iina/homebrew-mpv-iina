@@ -9,7 +9,7 @@ class MpvIina < Formula
   revision 3
   head "https://github.com/mpv-player/mpv.git"
 
-  keg_only "This formula is intended to only be used for building IINA. It is not recommended for daily use."
+  keg_only "it is intended to only be used for building IINA. This formula is not recommended for daily use"
 
   depends_on "docutils" => :build
   depends_on "pkg-config" => :build
