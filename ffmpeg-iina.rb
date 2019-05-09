@@ -8,8 +8,11 @@ class FfmpegIina < Formula
   sha256 "373749824dfd334d84e55dff406729edfd1606575ee44dd485d97d45ea4d2d86"
   head "https://github.com/FFmpeg/FFmpeg.git"
 
-  keg_only "This formula is intended to only be used for building IINA. It is not recommended for daily use."
-
+  keg_only <<EOS
+it is intended to only be used for building IINA. 
+This formula is not recommended for daily use and has no binaraies (ffmpeg, ffplay etc.)
+EOS
+  
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
@@ -58,6 +61,7 @@ class FfmpegIina < Formula
       --disable-libjack
       --disable-indev=jack
       --enable-libsoxr
+      --disable-programs
     ]
 
     system "./configure", *args
