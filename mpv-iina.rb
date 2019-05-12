@@ -43,6 +43,7 @@ class MpvIina < Formula
       --enable-uchardet
       --enable-libbluray
       --disable-swift
+      --disable-debug-build
       --confdir=#{etc}/mpv
       --datadir=#{pkgshare}
       --mandir=#{man}
