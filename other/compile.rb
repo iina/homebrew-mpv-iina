@@ -12,7 +12,18 @@ current_dir = "#{`pwd`.chomp}"
 system "brew tap iina/mpv-iina"
 
 def install(package)
-  system "brew reinstall #{package} -s"
+  if package == "libglib"
+    system "brew reinstall #{package} -s --bottle-arch=core2"
+  else
+    system "brew reinstall #{package} -s"
+  end
+end
+
+def patch_python
+  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.7/lib/python3.7/distutils/spawn.py"
+  lines = File.readlines(file_path)
+  lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
+  File.open(file_path, 'w') { |file| file.write lines.join }
 end
 
 if compile_deps
@@ -26,6 +37,9 @@ if compile_deps
 
   deps.each do |dep|
     install dep
+    if dep == "python"
+      patch_python
+    end
   end
 end
 
