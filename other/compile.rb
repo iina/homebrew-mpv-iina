@@ -12,11 +12,8 @@ current_dir = "#{`pwd`.chomp}"
 system "brew tap iina/mpv-iina"
 
 def install(package)
-  if package == "libglib"
-    system "brew reinstall #{package} -s --bottle-arch=core2"
-  else
-    system "brew reinstall #{package} -s"
-  end
+  system "brew uninstall #{package} --ignore-dependencies"
+  system "brew install #{package} --build-bottle"
 end
 
 def patch_python
