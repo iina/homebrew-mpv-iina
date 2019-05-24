@@ -25,6 +25,7 @@ end
 
 begin
   if compile_deps
+    ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
     homebrew_path = "#{`brew --prefix`.chomp}/Homebrew/"
     FileUtils.cd homebrew_path
     system "git reset --hard HEAD"
@@ -37,6 +38,7 @@ begin
       install dep
       if dep == "python"
         patch_python
+        system "brew postinstall python"
       end
     end
   end
@@ -44,5 +46,6 @@ begin
   install "mpv-iina"
 
 ensure
+  FileUtils.cd homebrew_path
   system "git reset --hard HEAD" if compile_deps
 end
