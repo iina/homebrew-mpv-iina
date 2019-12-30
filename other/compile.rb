@@ -24,13 +24,13 @@ def patch_python
 end
 
 begin
+  ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
+  homebrew_path = "#{`brew --prefix`.chomp}/Homebrew/"
+  FileUtils.cd homebrew_path
+  system "git reset --hard HEAD"
+  print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET)\n"
+  system "git apply #{current_dir}/#{homebrew_patch}"
   if compile_deps
-    ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
-    homebrew_path = "#{`brew --prefix`.chomp}/Homebrew/"
-    FileUtils.cd homebrew_path
-    system "git reset --hard HEAD"
-    print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET)\n"
-    system "git apply #{current_dir}/#{homebrew_patch}"
     deps = "#{`brew deps mpv-iina -n`}".split("\n")
     print "#{deps.length + 1} packages to be complied\n"
 
@@ -47,5 +47,5 @@ begin
 
 ensure
   FileUtils.cd homebrew_path
-  system "git reset --hard HEAD" if compile_deps
+  system "git reset --hard HEAD"
 end
