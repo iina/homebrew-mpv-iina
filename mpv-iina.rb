@@ -38,6 +38,7 @@ class MpvIina < Formula
       --enable-libarchive
       --enable-uchardet
       --enable-libbluray
+      --disable-swift
       --disable-debug-build
       --disable-macos-media-player
       --confdir=#{etc}/mpv
