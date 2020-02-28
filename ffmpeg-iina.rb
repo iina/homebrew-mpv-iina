@@ -1,11 +1,11 @@
-# Last check with upstream: ddecdf5c6eae496d60e52b6fbffe423ff22d1c84
+# Last check with upstream: 6a39dfa5a1b2c379f41b2a2f55c8baae75e0d553
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-4.2.1.tar.xz"
-  sha256 "cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4"
+  url "https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz"
+  sha256 "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
   head "https://github.com/FFmpeg/FFmpeg.git"
 
   keg_only <<EOS
@@ -16,7 +16,6 @@ EOS
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
-
   depends_on "aom"
   depends_on "fontconfig"
   depends_on "freetype"
@@ -33,11 +32,10 @@ EOS
   depends_on "tesseract"
   depends_on "xz"
 
-  def install
-    # Work around Xcode 11 clang bug
-    # https://bitbucket.org/multicoreware/x265/issues/514/wrong-code-generated-on-macos-1015
-    ENV.append_to_cflags "-fno-stack-check" if DevelopmentTools.clang_build_version >= 1010
+  use_from_macos "bzip2"
+  use_from_macos "zlib"
 
+  def install
     args = %W[
       --prefix=#{prefix}
       --enable-shared
