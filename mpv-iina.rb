@@ -1,3 +1,6 @@
+# Last check with upstream: 214fbf099806e2c79ec0f214e12b5becca988011
+# https://github.com/Homebrew/homebrew-core/blob/master/Formula/mpv.rb
+
 class MpvIina < Formula
   desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
@@ -47,7 +50,7 @@ class MpvIina < Formula
       --docdir=#{doc}
     ]
 
-    system "./bootstrap.py"
+    system "python3", "bootstrap.py"
     system "python3", "waf", "configure", *args
     system "python3", "waf", "install"
   end
