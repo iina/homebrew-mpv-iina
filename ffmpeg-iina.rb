@@ -1,11 +1,11 @@
-# Last check with upstream: 6a39dfa5a1b2c379f41b2a2f55c8baae75e0d553
+# Last check with upstream: 31797cc5a371f367753b2b268a72ba40f86b16f5
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz"
-  sha256 "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
+  url "https://ffmpeg.org/releases/ffmpeg-4.3.1.tar.xz"
+  sha256 "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb"
   head "https://github.com/FFmpeg/FFmpeg.git"
 
   keg_only <<EOS
@@ -16,7 +16,7 @@ EOS
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "texi2html" => :build
-  depends_on "aom"
+  depends_on "dav1d"
   depends_on "fontconfig"
   depends_on "freetype"
   depends_on "frei0r"
@@ -33,9 +33,11 @@ EOS
   depends_on "xz"
 
   uses_from_macos "bzip2"
+  uses_from_macos "libxml2"
   uses_from_macos "zlib"
 
   def install
+
     args = %W[
       --prefix=#{prefix}
       --enable-shared
@@ -49,10 +51,12 @@ EOS
       --enable-gnutls
       --enable-gpl
       --enable-libbluray
+      --enable-libdav1d
       --enable-librubberband
       --enable-libsnappy
       --enable-libtesseract
       --enable-libvidstab
+      --enable-libxml2
       --enable-libfontconfig
       --enable-libfreetype
       --enable-frei0r
@@ -74,7 +78,7 @@ EOS
     bin.install Dir["tools/*"].select { |f| File.executable? f }
 
     # Fix for Non-executables that were installed to bin/
-    mv bin/"python", pkgshare/"python", :force => true
+    mv bin/"python", pkgshare/"python", force: true
   end
 
   test do
