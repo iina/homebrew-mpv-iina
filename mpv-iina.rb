@@ -55,9 +55,9 @@ class MpvIina < Formula
       --lua=51deb
     ]
 
-    system "Formula["python@3.8"].opt_bin/python3", "bootstrap.py"
-    system "Formula["python@3.8"].opt_bin/python3", "waf", "configure", *args
-    system "Formula["python@3.8"].opt_bin/python3", "waf", "install"
+    system Formula["python@3.8"].opt_bin/"python3", "bootstrap.py"
+    system Formula["python@3.8"].opt_bin/"python3", "waf", "configure", *args
+    system Formula["python@3.8"].opt_bin/"python3", "waf", "install"
   end
 
   test do
