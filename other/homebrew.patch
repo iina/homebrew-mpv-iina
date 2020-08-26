@@ -1,17 +1,17 @@
 diff --git a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
-index b5485e33a..df7ea69e7 100644
+index f704e7dd1..67adec46d 100644
 --- a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
 +++ b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
-@@ -109,6 +109,7 @@ module Superenv
-   def setup_build_environment(formula = nil)
-     generic_setup_build_environment(formula)
-     self["HOMEBREW_SDKROOT"] = effective_sysroot
-+    ENV["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
+@@ -107,6 +107,7 @@ module Superenv
  
-     # Filter out symbols known not to be defined since GNU Autotools can't
-     # reliably figure this out with Xcode 8 and above.
+   # @private
+   def setup_build_environment(**options)
++    ENV["MACOSX_DEPLAYMENT_TARGET"] = "10.11"
+     formula = options[:formula]
+     sdk = formula ? MacOS.sdk_for_formula(formula) : MacOS.sdk
+     if MacOS.sdk_root_needed? || sdk&.source == :xcode
 diff --git a/Library/Homebrew/extend/os/mac/hardware.rb b/Library/Homebrew/extend/os/mac/hardware.rb
-index b41439350..2f3b0e894 100644
+index c1edebfa6..505847df4 100644
 --- a/Library/Homebrew/extend/os/mac/hardware.rb
 +++ b/Library/Homebrew/extend/os/mac/hardware.rb
 @@ -2,6 +2,7 @@
@@ -19,6 +19,6 @@ index b41439350..2f3b0e894 100644
  module Hardware
    def self.oldest_cpu(version = MacOS.version)
 +    return :core2
-     if version >= :mojave
-       :nehalem
-     else
+     if CPU.arch == :arm64
+       :arm_vortex_tempest
+     elsif version >= :mojave
