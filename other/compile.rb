@@ -19,13 +19,6 @@ def install(package)
   system "brew postinstall #{package}"
 end
 
-def patch_python
-  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.7/lib/python3.7/distutils/spawn.py"
-  lines = File.readlines(file_path)
-  lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
-  File.open(file_path, 'w') { |file| file.write lines.join }
-end
-
 def setup_env
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   FileUtils.cd $homebrew_path
@@ -42,17 +35,18 @@ end
 
 begin
   setup_env
+  return if $only_setup
 
   if $compile_deps
     deps = "#{`brew deps mpv-iina -n`}".split("\n")
-    print "#{deps.length + 1} packages to be complied\n"
+    print "#{deps.length + 1} packages to be compiled\n"
 
     deps.each do |dep|
+      print "\nCompiling #{dep}\n"
       install dep
-      if dep == "python"
-        patch_python
-        system "brew postinstall python"
-      end
+      print "------------------------\n"
+      print "#{dep} has been compiled\n"
+      print "------------------------\n"
     end
   end
 
