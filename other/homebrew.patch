@@ -1,21 +1,22 @@
-diff --git a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
-index f704e7dd1..67adec46d 100644
---- a/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
-+++ b/Library/Homebrew/extend/os/mac/extend/ENV/super.rb
-@@ -107,6 +107,7 @@ module Superenv
- 
-   # @private
-   def setup_build_environment(**options)
-+    ENV["MACOSX_DEPLAYMENT_TARGET"] = "10.11"
-     formula = options[:formula]
-     sdk = formula ? MacOS.sdk_for_formula(formula) : MacOS.sdk
-     if MacOS.sdk_root_needed? || sdk&.source == :xcode
+diff --git a/Library/Homebrew/extend/ENV/super.rb b/Library/Homebrew/extend/ENV/super.rb
+index ba3015a62..fc26b226e 100644
+--- a/Library/Homebrew/extend/ENV/super.rb
++++ b/Library/Homebrew/extend/ENV/super.rb
+@@ -40,6 +40,7 @@ module Superenv
+     super(**options)
+     send(compiler)
+
++    self["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
+     self["HOMEBREW_ENV"] = "super"
+     self["MAKEFLAGS"] ||= "-j#{determine_make_jobs}"
+     self["PATH"] = determine_path
+
 diff --git a/Library/Homebrew/extend/os/mac/hardware.rb b/Library/Homebrew/extend/os/mac/hardware.rb
 index c1edebfa6..505847df4 100644
 --- a/Library/Homebrew/extend/os/mac/hardware.rb
 +++ b/Library/Homebrew/extend/os/mac/hardware.rb
 @@ -2,6 +2,7 @@
- 
+
  module Hardware
    def self.oldest_cpu(version = MacOS.version)
 +    return :core2
