@@ -17,11 +17,6 @@ You do not have to use this script in most cases. The libraries that IINA ships 
 - Compile all IINA dependencies with `MACOSX_DEPLOTMENT_TARGET=10.11` to be compatible with OS X 10.11. This is done by patching homebrew (see `other/homebrew.patch`) before compiling and disable homebrew auto update.
 - Add `--build-bottle` option to homebrew when compiling to keep compatibility for some older architecture. See https://github.com/iina/iina/issues/1660 .
 
-
-~~
 - Patch Python before compiling harfbuzz to prevent Python from throwing errors complaining `$MACOSX_DEPLOYMENT_TARGET mismatch`. See https://stackoverflow.com/a/13315980 .
-~~
 
-~~
 **Important** This script automatically reverts changes to homebrew before exiting, but does not restore Python to its original state. Please reinstall Python from homebrew after running this script if you want to use a clean Python.
-~~

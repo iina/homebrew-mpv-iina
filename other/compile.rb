@@ -6,6 +6,7 @@ include FileUtils::Verbose
 
 $compile_deps = !$*.find_index("--no-deps")
 $only_setup = $*.find_index("--setup-env")
+$patch_python = $*.find_index("--patch-python")
 
 $homebrew_patch = "homebrew.patch"
 $current_dir = "#{`pwd`.chomp}"
@@ -27,6 +28,13 @@ def setup_env
   system "git apply #{$current_dir}/#{$homebrew_patch}"
 end
 
+def patch_python
+  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.8/lib/python3.8/distutils/spawn.py"
+  lines = File.readlines(file_path)
+  lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
+  File.open(file_path, 'w') { |file| file.write lines.join }
+end
+
 def reset
   return if $only_setup
   FileUtils.cd $homebrew_path
@@ -34,6 +42,10 @@ def reset
 end
 
 begin
+  if $patch_python
+    patch_python
+    return
+  end
   setup_env
   return if $only_setup
 
@@ -47,6 +59,9 @@ begin
       print "------------------------\n"
       print "#{dep} has been compiled\n"
       print "------------------------\n"
+      if dep == "python"
+        patch_python
+      end
     end
   end
 
