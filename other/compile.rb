@@ -51,15 +51,18 @@ begin
 
   if $compile_deps
     deps = "#{`brew deps mpv-iina -n`}".split("\n")
-    print "#{deps.length + 1} packages to be compiled\n"
+    total = deps.length + 1
+    print "#{total} packages to be compiled\n"
 
     deps.each do |dep|
       print "\nCompiling #{dep}\n"
       install dep
+      total -= 1
       print "------------------------\n"
       print "#{dep} has been compiled\n"
+      print "#{total} remained\n"
       print "------------------------\n"
-      if dep == "python"
+      if dep.starts_with?("python")
         patch_python
       end
     end
