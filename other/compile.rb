@@ -29,7 +29,7 @@ def setup_env
 end
 
 def patch_python
-  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.8/lib/python3.8/distutils/spawn.py"
+  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.9/lib/python3.9/distutils/spawn.py"
   lines = File.readlines(file_path)
   lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
   File.open(file_path, 'w') { |file| file.write lines.join }
