@@ -1,4 +1,4 @@
-# Last check with upstream: fe7e0b5ba38143a0466313d29b435afa255af627
+# Last check with upstream: 56a6686c9a1624607009d7d2e370d1a7fc7e2bcb
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/mpv.rb
 
 class MpvIina < Formula
@@ -12,7 +12,7 @@ class MpvIina < Formula
 
   depends_on "docutils" => :build
   depends_on "pkg-config" => :build
-  depends_on "python@3.8" => :build
+  depends_on "python@3.9" => :build
   depends_on xcode: :build
 
   depends_on "ffmpeg-iina"
@@ -55,9 +55,9 @@ class MpvIina < Formula
       --lua=51deb
     ]
 
-    system Formula["python@3.8"].opt_bin/"python3", "bootstrap.py"
-    system Formula["python@3.8"].opt_bin/"python3", "waf", "configure", *args
-    system Formula["python@3.8"].opt_bin/"python3", "waf", "install"
+    system Formula["python@3.9"].opt_bin/"python3", "bootstrap.py"
+    system Formula["python@3.9"].opt_bin/"python3", "waf", "configure", *args
+    system Formula["python@3.9"].opt_bin/"python3", "waf", "install"
   end
 
   test do
