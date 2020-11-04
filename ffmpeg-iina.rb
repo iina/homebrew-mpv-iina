@@ -1,4 +1,4 @@
-# Last check with upstream: 31797cc5a371f367753b2b268a72ba40f86b16f5
+# Last check with upstream: d60b9510b71ba1726282be48ee549af60b6c6298
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
@@ -15,7 +15,6 @@ EOS
 
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
-  depends_on "texi2html" => :build
   depends_on "dav1d"
   depends_on "fontconfig"
   depends_on "freetype"
