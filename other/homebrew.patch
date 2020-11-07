@@ -1,23 +1,22 @@
 diff --git a/Library/Homebrew/extend/ENV/super.rb b/Library/Homebrew/extend/ENV/super.rb
-index ba3015a62..fc26b226e 100644
+index 966e5e7c8..f9f9513b9 100644
 --- a/Library/Homebrew/extend/ENV/super.rb
 +++ b/Library/Homebrew/extend/ENV/super.rb
-@@ -40,6 +40,7 @@ module Superenv
+@@ -41,6 +41,7 @@ module Superenv
      super(**options)
      send(compiler)
-
+ 
 +    self["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
      self["HOMEBREW_ENV"] = "super"
      self["MAKEFLAGS"] ||= "-j#{determine_make_jobs}"
      self["PATH"] = determine_path
-
 diff --git a/Library/Homebrew/extend/os/mac/hardware.rb b/Library/Homebrew/extend/os/mac/hardware.rb
-index c1edebfa6..505847df4 100644
+index fb5d8bd58..1de2ded20 100644
 --- a/Library/Homebrew/extend/os/mac/hardware.rb
 +++ b/Library/Homebrew/extend/os/mac/hardware.rb
-@@ -2,6 +2,7 @@
-
- module Hardware
+@@ -5,6 +5,7 @@ module Hardware
+   extend T::Sig
+   sig { params(version: T.nilable(Version)).returns(Symbol) }
    def self.oldest_cpu(version = MacOS.version)
 +    return :core2
      if CPU.arch == :arm64
