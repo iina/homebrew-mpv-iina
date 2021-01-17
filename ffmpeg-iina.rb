@@ -1,4 +1,4 @@
-# Last check with upstream: d60b9510b71ba1726282be48ee549af60b6c6298
+# Last check with upstream: a05f21f97e1cc8d6647bded181517e51c1eec05c
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
@@ -30,6 +30,8 @@ EOS
   depends_on "speex"
   depends_on "tesseract"
   depends_on "xz"
+  depends_on "zeromq"
+  depends_on "zimg"
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
@@ -64,6 +66,8 @@ EOS
       --enable-libspeex
       --enable-libsoxr
       --enable-videotoolbox
+      --enable-libzmq
+      --enable-libzimg
       --disable-libjack
       --disable-indev=jack
       --disable-programs
