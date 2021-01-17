@@ -62,7 +62,7 @@ begin
       print "#{dep} has been compiled\n"
       print "#{total} remained\n"
       print "------------------------\n"
-      if dep.starts_with?("python")
+      if dep.start_with?("python")
         patch_python
       end
     end
