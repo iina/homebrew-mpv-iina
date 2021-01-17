@@ -5,7 +5,7 @@ This repo contains custom mpv and ffmpeg homebrew tap for IINA.
 ### mpv-iina.rb
 - Depends on ffmpeg-iina instead of ffmpeg
 - Does not depend on vapoursynth
-- Removes swift supoport
+- Removes swift support
 
 ### ffmpeg-iina.rb
 - Removed all encoding libraries
