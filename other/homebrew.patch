@@ -1,9 +1,9 @@
 diff --git a/Library/Homebrew/extend/ENV/super.rb b/Library/Homebrew/extend/ENV/super.rb
-index 966e5e7c8..f9f9513b9 100644
+index 5534cc8b0..26cbc93cf 100644
 --- a/Library/Homebrew/extend/ENV/super.rb
 +++ b/Library/Homebrew/extend/ENV/super.rb
-@@ -41,6 +41,7 @@ module Superenv
-     super(**options)
+@@ -55,6 +55,7 @@ module Superenv
+     super
      send(compiler)
  
 +    self["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
@@ -11,7 +11,7 @@ index 966e5e7c8..f9f9513b9 100644
      self["MAKEFLAGS"] ||= "-j#{determine_make_jobs}"
      self["PATH"] = determine_path
 diff --git a/Library/Homebrew/extend/os/mac/hardware.rb b/Library/Homebrew/extend/os/mac/hardware.rb
-index fb5d8bd58..1de2ded20 100644
+index 2b6e8de4e..0401dd6fd 100644
 --- a/Library/Homebrew/extend/os/mac/hardware.rb
 +++ b/Library/Homebrew/extend/os/mac/hardware.rb
 @@ -5,6 +5,7 @@ module Hardware
@@ -21,4 +21,4 @@ index fb5d8bd58..1de2ded20 100644
 +    return :core2
      if CPU.arch == :arm64
        :arm_vortex_tempest
-     elsif version >= :mojave
+     # TODO: this cannot be re-enabled until either Rosetta 2 supports AVX
