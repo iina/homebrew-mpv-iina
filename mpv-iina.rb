@@ -1,11 +1,11 @@
-# Last check with upstream: fb4cd399b74868e4d97b0b6426a95728ba53fc33
+# Last check with upstream: 356dc6f78059f1706bc8c6c44545c262dca43c3e
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/mpv.rb
 
 class MpvIina < Formula
   desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
-  url "https://github.com/mpv-player/mpv/archive/v0.33.0.tar.gz"
-  sha256 "f1b9baf5dc2eeaf376597c28a6281facf6ed98ff3d567e3955c95bf2459520b4"
+  url "https://github.com/mpv-player/mpv/archive/v0.33.1.tar.gz"
+  sha256 "100a116b9f23bdcda3a596e9f26be3a69f166a4f1d00910d1789b6571c46f3a9"
   head "https://github.com/mpv-player/mpv.git"
 
   keg_only "it is intended to only be used for building IINA. This formula is not recommended for daily use"
