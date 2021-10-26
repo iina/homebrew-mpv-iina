@@ -10,12 +10,12 @@ $patch_python = $*.find_index("--patch-python")
 
 $homebrew_patch = "homebrew.patch"
 $current_dir = "#{`pwd`.chomp}"
-$homebrew_path = "#{`brew --prefix`.chomp}/Homebrew/"
+$homebrew_path = "#{`brew --prefix`.chomp}/"
 
 # system "brew tap iina/mpv-iina"
 
 def install(package)
-  system "brew uninstall #{package} --ignore-dependencies"
+  system("brew uninstall #{package} --ignore-dependencies", :err => File::NULL)
   system "brew install #{package} --build-bottle"
   system "brew postinstall #{package}"
 end
@@ -24,7 +24,7 @@ def setup_env
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
-  print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET)\n"
+  print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
   system "git apply #{$current_dir}/#{$homebrew_patch}"
 end
 
@@ -62,7 +62,7 @@ begin
       print "#{dep} has been compiled\n"
       print "#{total} remained\n"
       print "------------------------\n"
-      if dep.starts_with?("python")
+      if dep.start_with?("python")
         patch_python
       end
     end
