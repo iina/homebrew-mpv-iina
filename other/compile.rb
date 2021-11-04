@@ -27,6 +27,7 @@ end
 
 def setup_env
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
+  ENV["HOMEBREW_NO_INSTALL_UPGRADE"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
   print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
