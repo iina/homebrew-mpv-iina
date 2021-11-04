@@ -8,9 +8,14 @@ $compile_deps = !$*.find_index("--no-deps")
 $only_setup = $*.find_index("--setup-env")
 $patch_python = $*.find_index("--patch-python")
 
-$homebrew_patch = "homebrew.patch"
+arch = %x[arch]
+$homebrew_patch = if arch == "arm64"
+                    "homebrew_arm.patch"
+                  else
+                    "homebrew_x86.patch"
+                  end
 $current_dir = "#{`pwd`.chomp}"
-$homebrew_path = "#{`brew --prefix`.chomp}/"
+$homebrew_path = "#{`brew --repository`.chomp}/"
 
 # system "brew tap iina/mpv-iina"
 
