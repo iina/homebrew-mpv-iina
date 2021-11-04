@@ -8,7 +8,7 @@ $compile_deps = !$*.find_index("--no-deps")
 $only_setup = $*.find_index("--setup-env")
 $patch_python = $*.find_index("--patch-python")
 
-arch = %x[arch]
+arch = %x[arch].chomp
 $homebrew_patch = if arch == "arm64"
                     "homebrew_arm.patch"
                   else
