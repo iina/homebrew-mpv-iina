@@ -23,6 +23,10 @@ def install(package)
   system "brew reinstall #{package} --build-from-source"
 end
 
+def setup_rb(package)
+  system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"' $(brew edit --print-path #{package})"
+end
+
 def setup_env
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_UPGRADE"] = "1"
@@ -52,6 +56,13 @@ begin
   end
   setup_env
   return if $only_setup
+  if arch != "arm64" 
+    pkgs = ["rubberband", "libpng", "luajit-openresty", "glib"]
+    pkgs.each do |dep|
+      setup_rb dep
+    end
+    print "#{pkgs} rb files prepared\n"
+  end
 
   if $compile_deps
     deps = "#{`brew deps mpv-iina -n`}".split("\n")
