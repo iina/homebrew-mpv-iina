@@ -23,6 +23,10 @@ def install(package)
   system "brew reinstall #{package} --build-from-source"
 end
 
+def fetch(package)
+  system "brew fetch -s #{package}"
+end
+
 def setup_rb(package)
   system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"' $(brew edit --print-path #{package})"
 end
@@ -64,9 +68,16 @@ begin
     print "#{pkgs} rb files prepared\n"
   end
 
+  deps = "#{`brew deps mpv-iina -n`}".split("\n")
+  total = deps.length + 1
+
+  deps.each do |dep|
+    fetch dep
+  end
+  fetch "mpv-iina"
+  print "\n#{total} fetched\n"
+
   if $compile_deps
-    deps = "#{`brew deps mpv-iina -n`}".split("\n")
-    total = deps.length + 1
     print "#{total} packages to be compiled\n"
 
     deps.each do |dep|
