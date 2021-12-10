@@ -20,9 +20,15 @@ $homebrew_path = "#{`brew --repository`.chomp}/"
 # system "brew tap iina/mpv-iina"
 
 def install(package)
-  system("brew uninstall #{package} --ignore-dependencies", :err => File::NULL)
-  system "brew install #{package} --build-bottle"
-  system "brew postinstall #{package}"
+  system "brew reinstall #{package} --build-from-source"
+end
+
+def fetch(package)
+  system "brew fetch -s #{package}"
+end
+
+def setup_rb(package)
+  system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"\n' $(brew edit --print-path #{package})"
 end
 
 def setup_env
@@ -54,10 +60,24 @@ begin
   end
   setup_env
   return if $only_setup
+  if arch != "arm64" 
+    pkgs = ["rubberband", "libpng", "luajit-openresty", "glib"]
+    pkgs.each do |dep|
+      setup_rb dep
+    end
+    print "#{pkgs} rb files prepared\n"
+  end
+
+  deps = "#{`brew deps mpv-iina -n`}".split("\n")
+  total = deps.length + 1
+
+  deps.each do |dep|
+    fetch dep
+  end
+  fetch "mpv-iina"
+  print "\n#{total} fetched\n"
 
   if $compile_deps
-    deps = "#{`brew deps mpv-iina -n`}".split("\n")
-    total = deps.length + 1
     print "#{total} packages to be compiled\n"
 
     deps.each do |dep|

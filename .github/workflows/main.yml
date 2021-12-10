@@ -1,0 +1,53 @@
+name: Build Intel deps
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "warning"
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  release-osx:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Tap mpv-iina
+        shell: zsh {0}
+        run: |
+          brew tap iina/homebrew-mpv-iina
+          brew developer on
+
+      - name: Prepare sd
+        shell: zsh {0}
+        run: |
+          brew install sd
+
+      - name: Run compile.rb
+        shell: zsh {0}
+        run: |
+          cd other
+          echo $PWD
+          chmod +x compile.rb
+          ./compile.rb
+
+      - name: Run change_lib_dependencies.rb
+        run: |
+          echo $PWD
+          mkdir deps
+          wget 'https://raw.githubusercontent.com/iina/iina/master/other/change_lib_dependencies.rb' -P other
+          chmod +x other/change_lib_dependencies.rb
+          other/change_lib_dependencies.rb "$(brew --prefix)" "$(brew --prefix mpv-iina)/lib/libmpv.dylib"
+          
+      - name: Archive libs
+        uses: actions/upload-artifact@v2
+        with:
+          name: deps
+          path: deps/
