@@ -20,9 +20,7 @@ $homebrew_path = "#{`brew --repository`.chomp}/"
 # system "brew tap iina/mpv-iina"
 
 def install(package)
-  system("brew uninstall #{package} --ignore-dependencies", :err => File::NULL)
-  system "brew install #{package} --build-bottle"
-  system "brew postinstall #{package}"
+  system "brew reinstall #{package} --build-from-source"
 end
 
 def setup_env
