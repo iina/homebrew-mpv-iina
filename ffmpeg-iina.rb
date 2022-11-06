@@ -31,6 +31,8 @@ EOS
   depends_on "xz"
   depends_on "zeromq"
   depends_on "zimg"
+  depends_on "jpeg-xl" # for JPEG-XL format screenshot
+  depends_on "webp" # for webp format screenshot
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
@@ -65,6 +67,8 @@ EOS
       --enable-videotoolbox
       --enable-libzmq
       --enable-libzimg
+      --enable-libjxl
+      --enable-libwebp
       --disable-libjack
       --disable-indev=jack
       --disable-programs
