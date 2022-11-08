@@ -1,19 +1,18 @@
-# Last check with upstream: 5ef3900b6178dee40629e3e058a587ef196b53b1
+# Last check with upstream: a6f1a028cc72f2f0d7943799b2aef1967c85d917
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-4.4.2.tar.xz"
-  sha256 "af419a7f88adbc56c758ab19b4c708afbcae15ef09606b82b855291f6a6faa93"
-  head "https://github.com/FFmpeg/FFmpeg.git"
+  url "https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.xz"
+  sha256 "619e706d662c8420859832ddc259cd4d4096a48a2ce1eefd052db9e440eef3dc"
+  head "https://github.com/FFmpeg/FFmpeg.git", branch: "master"
 
   keg_only <<EOS
 it is intended to only be used for building IINA.
 This formula is not recommended for daily use and has no binaraies (ffmpeg, ffplay etc.)
 EOS
 
-  depends_on "nasm" => :build
   depends_on "pkg-config" => :build
   depends_on "dav1d"
   depends_on "fontconfig"
@@ -33,6 +32,10 @@ EOS
   depends_on "zimg"
   depends_on "jpeg-xl" # for JPEG-XL format screenshot
   depends_on "webp" # for webp format screenshot
+
+  on_intel do
+    depends_on "nasm" => :build
+  end
 
   uses_from_macos "bzip2"
   uses_from_macos "libxml2"
@@ -74,15 +77,11 @@ EOS
       --disable-programs
     ]
 
+    args << "--enable-neon" if Hardware::CPU.arm?
+
     system "./configure", *args
     system "make", "install"
 
-    # Build and install additional FFmpeg tools
-    system "make", "alltools"
-    bin.install Dir["tools/*"].select { |f| File.executable? f }
-
-    # Fix for Non-executables that were installed to bin/
-    mv bin/"python", pkgshare/"python", force: true
   end
 
   test do
