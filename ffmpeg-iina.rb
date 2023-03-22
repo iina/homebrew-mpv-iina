@@ -1,4 +1,4 @@
-# Last check with upstream: a6f1a028cc72f2f0d7943799b2aef1967c85d917
+# Last check with upstream: 4202a3d17fca4ef8ccbec96a7bf5b706a1f8d145
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
 
 class FfmpegIina < Formula
