@@ -34,6 +34,7 @@ end
 def setup_env
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_UPGRADE"] = "1"
+  ENV["HOMEBREW_NO_INSTALL_CLEANUP"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
   print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
@@ -41,7 +42,7 @@ def setup_env
 end
 
 def patch_python
-  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.11/lib/python3.9/distutils/spawn.py"
+  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.11/lib/python3.11/distutils/spawn.py"
   lines = File.readlines(file_path)
   lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
   File.open(file_path, 'w') { |file| file.write lines.join }

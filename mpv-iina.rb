@@ -53,7 +53,7 @@ class MpvIina < Formula
 
       -Dswift-build=disabled
       -Dmacos-cocoa-cb=disabled
-      -Dmacos-cocoa-media-player=disabled
+      -Dmacos-media-player=disabled
       -Dmacos-touchbar=disabled
       -Dmanpage-build=disabled
 
