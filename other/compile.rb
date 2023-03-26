@@ -6,7 +6,6 @@ include FileUtils::Verbose
 
 $compile_deps = !$*.find_index("--no-deps")
 $only_setup = $*.find_index("--setup-env")
-$patch_python = $*.find_index("--patch-python")
 
 arch = %x[arch].chomp
 $homebrew_patch = if arch == "arm64"
@@ -41,13 +40,6 @@ def setup_env
   system "git apply #{$current_dir}/#{$homebrew_patch}"
 end
 
-def patch_python
-  file_path = "#{`brew --prefix python`.chomp}/Frameworks/Python.framework/Versions/3.11/lib/python3.11/distutils/spawn.py"
-  lines = File.readlines(file_path)
-  lines.filter! { |line| !line.end_with?("raise DistutilsPlatformError(my_msg)\n") }
-  File.open(file_path, 'w') { |file| file.write lines.join }
-end
-
 def reset
   return if $only_setup
   FileUtils.cd $homebrew_path
@@ -55,14 +47,10 @@ def reset
 end
 
 begin
-  if $patch_python
-    patch_python
-    return
-  end
   setup_env
   return if $only_setup
   if arch != "arm64"
-    pkgs = ["rubberband", "libpng", "luajit-openresty", "glib"]
+    pkgs = ["rubberband", "libpng", "luajit", "glib"]
     pkgs.each do |dep|
       setup_rb dep
     end
@@ -89,9 +77,6 @@ begin
       print "#{dep} has been compiled\n"
       print "#{total} remained\n"
       print "------------------------\n"
-      if dep.start_with?("python")
-        patch_python
-      end
     end
   end
 
