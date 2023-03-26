@@ -26,6 +26,13 @@ def fetch(package)
   system "brew fetch -s #{package}"
 end
 
+def patch_luajit
+  file_path = "#{`brew edit --print-path luajit`}"
+  lines = File.readlines(file_path)
+  lines.filter! { |line| !line.end_with?("ENV[\"MACOSX_DEPLOYMENT_TARGET\"] = MacOS.version\n") }
+  File.open(file_path, 'w') { |file| file.write lines.join }
+end
+
 def setup_rb(package)
   system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"\n' $(brew edit --print-path #{package})"
 end
@@ -70,6 +77,11 @@ begin
     print "#{total} packages to be compiled\n"
 
     deps.each do |dep|
+
+      if dep.start_with?("luajit")
+        patch_luajit
+      end
+
       print "\nCompiling #{dep}\n"
       install dep
       total -= 1
