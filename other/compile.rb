@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "fileutils"
+require "pathname"
 
 include FileUtils::Verbose
 
@@ -28,7 +29,7 @@ end
 
 def patch_luajit
   file_path = "#{`brew edit --print-path luajit`}"
-  lines = File.readlines(file_path)
+  lines = Pathname(file_path).readlines
   lines.filter! { |line| !line.end_with?("ENV[\"MACOSX_DEPLOYMENT_TARGET\"] = MacOS.version\n") }
   File.open(file_path, 'w') { |file| file.write lines.join }
 end
