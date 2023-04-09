@@ -24,7 +24,7 @@ def install(package)
 end
 
 def fetch(package)
-  system "brew fetch -s #{package}"
+  system "brew fetch -f -s #{package}"
 end
 
 def patch_luajit
@@ -34,14 +34,29 @@ def patch_luajit
   File.open(file_path, 'w') { |file| file.write lines.join }
 end
 
+def patch_rubberband
+  file_path = "#{`brew edit --print-path rubberband`}".chomp
+  lines = Pathname(file_path).readlines
+  arg_line = lines.index { |l| l.end_width? "args = [\"-Dresampler=libsamplerate\"]\n" }
+  lines.insert(arg_line + 1, "args << \"-Dcpp_args=-mmacosx-version-min=10.11\"\n")
+  File.open(file_path, 'w') { |file| file.write lines.join }
+end
+
+def livecheck(package)
+  splitted = `brew livecheck rubberband`.split(/:|==>/).map { |x| x.strip }
+  splitted[1] == splitted[2]
+end
+
 def setup_rb(package)
   system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"\n' $(brew edit --print-path #{package})"
 end
 
 def setup_env
+  system "brew update --auto-update"
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_UPGRADE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_CLEANUP"] = "1"
+  ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
   print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
@@ -78,10 +93,10 @@ begin
     print "#{total} packages to be compiled\n"
 
     deps.each do |dep|
+      raise "brew livecheck failed for #{dep}" unless livecheck dep
 
-      if dep.start_with?("luajit")
-        patch_luajit
-      end
+      patch_luajit if dep.start_with?("luajit")
+      patch_rubberband if dep.start_with?("rubberband")
 
       print "\nCompiling #{dep}\n"
       install dep
