@@ -88,6 +88,10 @@ begin
   setup_env
   return if $only_setup
 
+  patch_formula 'luajit' do |p|
+    p.remove_line 'ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version'
+  end
+
   # Patch formulas to set deployment target to be 10.11
   if arch != "arm64"
     patch_formula 'libpng', 'luajit', 'glib' do |p|
@@ -104,10 +108,6 @@ begin
       p.append_after_line 'args = ["-Dresampler=libsamplerate"]' do
         'args << "-Dcpp_args=-mmacosx-version-min=10.11"'
       end
-    end
-
-    patch_formula 'luajit' do |p|
-      p.remove_line 'ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version'
     end
 
     patch_formula 'jpeg-xl' do |p|
