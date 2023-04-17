@@ -24,14 +24,40 @@ def install(package)
 end
 
 def fetch(package)
-  system "brew fetch -s #{package}"
+  system "brew fetch -f -s #{package}"
 end
 
-def patch_luajit
-  file_path = "#{`brew edit --print-path luajit`}".chomp
-  lines = Pathname(file_path).readlines
-  lines.filter! { |line| !line.end_with?("ENV[\"MACOSX_DEPLOYMENT_TARGET\"] = MacOS.version\n") }
-  File.open(file_path, 'w') { |file| file.write lines.join }
+class FormulaPatcher
+  def initialize(lib)
+    @file_path = `brew edit --print-path #{lib}`.strip
+  end
+
+  def remove_line(ln)
+    lines = Pathname(@file_path).readlines
+    lines.filter! { |line| !line.strip.end_with?(ln) }
+    File.open(@file_path, 'w') { |file| file.write lines.join }
+  end
+
+  def append_after_line(ln, &block)
+    new_ln = block.call
+    lines = Pathname(@file_path).readlines
+    arg_line = lines.index { |l| l.strip.end_with?(ln) }
+    lines.insert(arg_line + 1, new_ln + "\n")
+    File.open(@file_path, 'w') { |file| file.write lines.join }
+  end
+end
+
+def patch_formula(*libs, &block)
+  libs.each do |lib|
+    patcher = FormulaPatcher.new(lib)
+    block.call(patcher)
+    p "Patched #{lib}"
+  end
+end
+
+def livecheck(package)
+  splitted = `brew livecheck rubberband`.split(/:|==>/).map { |x| x.strip }
+  splitted[1] == splitted[2]
 end
 
 def setup_rb(package)
@@ -39,9 +65,11 @@ def setup_rb(package)
 end
 
 def setup_env
+  system "brew update --auto-update"
   ENV["HOMEBREW_NO_AUTO_UPDATE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_UPGRADE"] = "1"
   ENV["HOMEBREW_NO_INSTALL_CLEANUP"] = "1"
+  ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
   print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
@@ -54,15 +82,39 @@ def reset
   system "git reset --hard HEAD"
 end
 
+# Begin compilation
+
 begin
   setup_env
   return if $only_setup
+
+  # Patch formulas to set deployment target to be 10.11
   if arch != "arm64"
-    pkgs = ["rubberband", "libpng", "luajit", "glib"]
-    pkgs.each do |dep|
-      setup_rb dep
+    patch_formula 'libpng', 'luajit', 'glib' do |p|
+      p.append_after_line 'def install' do
+        %q(
+          ENV["CFLAGS"] = "-mmacosx-version-min=10.11"
+          ENV["LDFLAGS"] = "-mmacosx-version-min=10.11"
+          ENV["CXXFLAGS"] = "-mmacosx-version-min=10.11"
+        )
+      end
     end
-    print "#{pkgs} rb files prepared\n"
+
+    patch_formula 'rubberband' do |p|
+      p.append_after_line 'args = ["-Dresampler=libsamplerate"]' do
+        'args << "-Dcpp_args=-mmacosx-version-min=10.11"'
+      end
+    end
+
+    patch_formula 'luajit' do |p|
+      p.remove_line 'ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version'
+    end
+
+    patch_formula 'jpeg-xl' do |p|
+      p.append_after_line 'system "cmake", "-S", ".", "-B", "build",' do
+        '"-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.13",'
+      end
+    end
   end
 
   deps = "#{`brew deps mpv-iina -n`}".split("\n")
@@ -78,10 +130,7 @@ begin
     print "#{total} packages to be compiled\n"
 
     deps.each do |dep|
-
-      if dep.start_with?("luajit")
-        patch_luajit
-      end
+      raise "brew livecheck failed for #{dep}" unless livecheck dep
 
       print "\nCompiling #{dep}\n"
       install dep

@@ -26,7 +26,7 @@ EOS
   depends_on "rubberband"
   depends_on "snappy"
   depends_on "speex"
-  depends_on "tesseract"
+  # depends_on "tesseract"
   depends_on "xz"
   depends_on "zeromq"
   depends_on "zimg"
@@ -58,7 +58,7 @@ EOS
       --enable-libdav1d
       --enable-librubberband
       --enable-libsnappy
-      --enable-libtesseract
+      --disable-libtesseract
       --enable-libvidstab
       --enable-libxml2
       --enable-libfontconfig
