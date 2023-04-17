@@ -38,7 +38,8 @@ class FormulaPatcher
     File.open(@file_path, 'w') { |file| file.write lines.join }
   end
 
-  def append_after_line(ln, new_ln)
+  def append_after_line(ln, &block)
+    new_ln = block.call
     lines = Pathname(@file_path).readlines
     arg_line = lines.index { |l| l.strip.end_with?(ln) }
     lines.insert(arg_line + 1, new_ln + "\n")
@@ -90,18 +91,19 @@ begin
   # Patch formulas to set deployment target to be 10.11
   if arch != "arm64"
     patch_formula 'libpng', 'luajit', 'glib' do |p|
-      p.append_after_line('def install', %q(
-        ENV["CFLAGS"] = "-mmacosx-version-min=10.11"
-        ENV["LDFLAGS"] = "-mmacosx-version-min=10.11"
-        ENV["CXXFLAGS"] = "-mmacosx-version-min=10.11"
-      ))
+      p.append_after_line 'def install' do
+        %q(
+          ENV["CFLAGS"] = "-mmacosx-version-min=10.11"
+          ENV["LDFLAGS"] = "-mmacosx-version-min=10.11"
+          ENV["CXXFLAGS"] = "-mmacosx-version-min=10.11"
+        )
+      end
     end
 
     patch_formula 'rubberband' do |p|
-      p.append_after_line(
-        'args = ["-Dresampler=libsamplerate"]',
+      p.append_after_line 'args = ["-Dresampler=libsamplerate"]' do
         'args << "-Dcpp_args=-mmacosx-version-min=10.11"'
-      )
+      end
     end
 
     patch_formula 'luajit' do |p|
@@ -109,10 +111,9 @@ begin
     end
 
     patch_formula 'jpeg-xl' do |p|
-      p.append_after_line(
-        'system "cmake", "-S", ".", "-B", "build",',
+      p.append_after_line 'system "cmake", "-S", ".", "-B", "build",' do
         '"-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.13",'
-      )
+      end
     end
   end
 
