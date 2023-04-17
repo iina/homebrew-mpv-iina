@@ -27,19 +27,31 @@ def fetch(package)
   system "brew fetch -f -s #{package}"
 end
 
-def patch_luajit
-  file_path = "#{`brew edit --print-path luajit`}".chomp
-  lines = Pathname(file_path).readlines
-  lines.filter! { |line| !line.end_with?("ENV[\"MACOSX_DEPLOYMENT_TARGET\"] = MacOS.version\n") }
-  File.open(file_path, 'w') { |file| file.write lines.join }
+class FormulaPatcher
+  def initialize(lib)
+    @file_path = `brew edit --print-path #{lib}`.strip
+  end
+
+  def remove_line(ln)
+    lines = Pathname(@file_path).readlines
+    lines.filter! { |line| !line.strip.end_with?(ln) }
+    File.open(@file_path, 'w') { |file| file.write lines.join }
+  end
+
+  def append_after_line(ln, new_ln)
+    lines = Pathname(@file_path).readlines
+    arg_line = lines.index { |l| l.strip.end_with?(ln) }
+    lines.insert(arg_line + 1, new_ln + "\n")
+    File.open(@file_path, 'w') { |file| file.write lines.join }
+  end
 end
 
-def patch_rubberband
-  file_path = "#{`brew edit --print-path rubberband`}".chomp
-  lines = Pathname(file_path).readlines
-  arg_line = lines.index { |l| l.end_width? "args = [\"-Dresampler=libsamplerate\"]\n" }
-  lines.insert(arg_line + 1, "args << \"-Dcpp_args=-mmacosx-version-min=10.11\"\n")
-  File.open(file_path, 'w') { |file| file.write lines.join }
+def patch_formula(*libs, &block)
+  libs.each do |lib|
+    patcher = FormulaPatcher.new(lib)
+    block.call(patcher)
+    p "Patched #{lib}"
+  end
 end
 
 def livecheck(package)
@@ -69,15 +81,39 @@ def reset
   system "git reset --hard HEAD"
 end
 
+# Begin compilation
+
 begin
   setup_env
   return if $only_setup
+
+  # Patch formulas to set deployment target to be 10.11
   if arch != "arm64"
-    pkgs = ["rubberband", "libpng", "luajit", "glib"]
-    pkgs.each do |dep|
-      setup_rb dep
+    patch_formula 'libpng', 'luajit', 'glib' do |p|
+      p.append_after_line('def install', %q(
+        ENV["CFLAGS"] = "-mmacosx-version-min=10.11"
+        ENV["LDFLAGS"] = "-mmacosx-version-min=10.11"
+        ENV["CXXFLAGS"] = "-mmacosx-version-min=10.11"
+      ))
     end
-    print "#{pkgs} rb files prepared\n"
+
+    patch_formula 'rubberband' do |p|
+      p.append_after_line(
+        'args = ["-Dresampler=libsamplerate"]',
+        'args << "-Dcpp_args=-mmacosx-version-min=10.11"'
+      )
+    end
+
+    patch_formula 'luajit' do |p|
+      p.remove_line 'ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version'
+    end
+
+    patch_formula 'jpeg-xl' do |p|
+      p.append_after_line(
+        'system "cmake", "-S", ".", "-B", "build",',
+        '"-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.13",'
+      )
+    end
   end
 
   deps = "#{`brew deps mpv-iina -n`}".split("\n")
@@ -94,9 +130,6 @@ begin
 
     deps.each do |dep|
       raise "brew livecheck failed for #{dep}" unless livecheck dep
-
-      patch_luajit if dep.start_with?("luajit")
-      patch_rubberband if dep.start_with?("rubberband")
 
       print "\nCompiling #{dep}\n"
       install dep
