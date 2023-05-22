@@ -31,6 +31,20 @@ class MpvIina < Formula
   # Fix ytdl issue. Remove after next mpv release.
   patch :DATA
 
+  # Fix charset conversion issue. Remove after next mpv release.
+  patch do 
+    url "https://gist.githubusercontent.com/lhc70000/ab2aa7c8728ad18367082e7f0a9ad059/raw/8a8da66707de7bc12b689d60591ce0621d57e3ba/charset_conv.diff"
+    sha256 "30315e3d5ba962201516ff7c4420bcb2b6d664c0c1caba1b570369624ecc7748"
+  end
+
+  # Fix mpv not allowing sleep. Remove after these are resolved:
+  # PR https://github.com/mpv-player/mpv/pull/11667
+  # issue https://github.com/mpv-player/mpv/issues/11617
+  patch do 
+    url "https://gist.githubusercontent.com/lhc70000/ab2aa7c8728ad18367082e7f0a9ad059/raw/eceb7b620a763677c0a5ef2b07e10fa26f95a943/coreaudio_allow_sleep.patch"
+    sha256 "c7f179331ddae45b119803b0556a2b05c5f7a314ebdb8696a7db65c3ebbd0c0e"
+  end
+
   def install
     # LANG is unset by default on macOS and causes issues when calling getlocale
     # or getdefaultlocale in docutils. Force the default c/posix locale since
