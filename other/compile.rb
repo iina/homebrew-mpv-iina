@@ -7,6 +7,7 @@ include FileUtils::Verbose
 
 $compile_deps = !$*.find_index("--no-deps")
 $only_setup = $*.find_index("--setup-env")
+$install_head = $*.find_index("--head")
 
 arch = %x[arch].chomp
 $homebrew_patch = if arch == "arm64"
@@ -19,8 +20,13 @@ $homebrew_path = "#{`brew --repository`.chomp}/"
 
 # system "brew tap iina/mpv-iina"
 
-def install(package)
-  system "brew reinstall #{package} --build-from-source"
+def install(package, head: false)
+  if head
+    system "brew uninstall #{package}"
+    system "brew install #{package} --HEAD"
+  else
+    system "brew reinstall #{package} --build-from-source"
+  end
 end
 
 def fetch(package)
@@ -142,7 +148,7 @@ begin
     end
   end
 
-  install "mpv-iina"
+  install "mpv-iina", head: $install_head
 
 ensure
   reset
