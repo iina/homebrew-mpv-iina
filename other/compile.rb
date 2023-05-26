@@ -118,7 +118,10 @@ begin
 
     patch_formula 'jpeg-xl' do |p|
       p.append_after_line 'system "cmake", "-S", ".", "-B", "build",' do
-        '"-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.13",'
+        %q(
+          "-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.11",
+          "-DCMAKE_CXX_FLAGS='-O2 -fno-sized-deallocation'",
+        )
       end
     end
   end
