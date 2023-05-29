@@ -30,7 +30,7 @@ EOS
   depends_on "xz"
   depends_on "zeromq"
   depends_on "zimg"
-  depends_on "jpeg-xl" # for JPEG-XL format screenshot
+  # depends_on "jpeg-xl" # for JPEG-XL format screenshot
   depends_on "webp" # for webp format screenshot
 
   on_intel do
@@ -70,7 +70,6 @@ EOS
       --enable-videotoolbox
       --enable-libzmq
       --enable-libzimg
-      --enable-libjxl
       --enable-libwebp
       --disable-libjack
       --disable-indev=jack
