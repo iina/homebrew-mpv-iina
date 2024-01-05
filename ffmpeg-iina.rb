@@ -48,7 +48,6 @@ EOS
       --enable-shared
       --enable-pthreads
       --enable-version3
-      --cc=#{ENV.cc}
       --host-cflags=#{ENV.cflags}
       --host-ldflags=#{ENV.ldflags}
       --enable-ffplay
@@ -76,7 +75,8 @@ EOS
       --disable-programs
     ]
 
-    args << "--enable-neon" if Hardware::CPU.arm?
+    args << "--enable-neon --cc=gcc" if Hardware::CPU.arm?
+    args << "--cc=#{ENV.cc}" if Hardware::CPU.intel?
 
     system "./configure", *args
     system "make", "install"
