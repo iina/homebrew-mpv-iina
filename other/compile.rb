@@ -67,7 +67,7 @@ def livecheck(package)
 end
 
 def setup_rb(package)
-  system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.11\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.11\"\n' $(brew edit --print-path #{package})"
+  system "sd 'def install' 'def install\n\tENV[\"CFLAGS\"] = \"-mmacosx-version-min=10.15\"\n\tENV[\"LDFLAGS\"] = \"-mmacosx-version-min=10.15\"\n\tENV[\"CXXFLAGS\"] = \"-mmacosx-version-min=10.15\"\n' $(brew edit --print-path #{package})"
 end
 
 def setup_env
@@ -78,7 +78,7 @@ def setup_env
   ENV["HOMEBREW_NO_INSTALL_FROM_API"] = "1"
   FileUtils.cd $homebrew_path
   system "git reset --hard HEAD"
-  print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET & oldest CPU)\n"
+  print "Applying Homebrew patch (MACOSX_DEPLOYMENT_TARGET)\n"
   system "git apply #{$current_dir}/#{$homebrew_patch}"
 end
 
@@ -98,28 +98,28 @@ begin
     p.remove_line 'ENV["MACOSX_DEPLOYMENT_TARGET"] = MacOS.version'
   end
 
-  # Patch formulas to set deployment target to be 10.11
+  # Patch formulas to set deployment target to be 10.15
   if arch != "arm64"
     patch_formula 'libpng', 'luajit', 'glib' do |p|
       p.append_after_line 'def install' do
         %q(
-          ENV["CFLAGS"] = "-mmacosx-version-min=10.11"
-          ENV["LDFLAGS"] = "-mmacosx-version-min=10.11"
-          ENV["CXXFLAGS"] = "-mmacosx-version-min=10.11"
+          ENV["CFLAGS"] = "-mmacosx-version-min=10.15"
+          ENV["LDFLAGS"] = "-mmacosx-version-min=10.15"
+          ENV["CXXFLAGS"] = "-mmacosx-version-min=10.15"
         )
       end
     end
 
     patch_formula 'rubberband' do |p|
       p.append_after_line 'args = ["-Dresampler=libsamplerate"]' do
-        'args << "-Dcpp_args=-mmacosx-version-min=10.11"'
+        'args << "-Dcpp_args=-mmacosx-version-min=10.15"'
       end
     end
 
     patch_formula 'jpeg-xl' do |p|
       p.append_after_line 'system "cmake", "-S", ".", "-B", "build",' do
         %q(
-          "-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.11",
+          "-DCMAKE_CXX_FLAGS=-mmacosx-version-min=10.15",
           "-DCMAKE_CXX_FLAGS='-O2 -fno-sized-deallocation'",
         )
       end
