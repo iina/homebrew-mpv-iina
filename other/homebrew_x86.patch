@@ -6,19 +6,7 @@ index 734eccb95..8d0fee78f 100644
      super
      send(compiler)
  
-+    self["MACOSX_DEPLOYMENT_TARGET"] = "10.11"
++    self["MACOSX_DEPLOYMENT_TARGET"] = "10.15"
      self["HOMEBREW_ENV"] = "super"
      self["MAKEFLAGS"] ||= "-j#{determine_make_jobs}"
      self["PATH"] = determine_path
-diff --git a/Library/Homebrew/extend/os/mac/hardware.rb b/Library/Homebrew/extend/os/mac/hardware.rb
-index cbe49c842..a280527d4 100644
---- a/Library/Homebrew/extend/os/mac/hardware.rb
-+++ b/Library/Homebrew/extend/os/mac/hardware.rb
-@@ -4,6 +4,7 @@
- module Hardware
-   sig { params(version: T.nilable(Version)).returns(Symbol) }
-   def self.oldest_cpu(version = nil)
-+    return :core2
-     version = if version
-       MacOSVersion.new(version.to_s)
-     else
