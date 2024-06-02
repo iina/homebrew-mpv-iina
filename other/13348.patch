@@ -1,0 +1,31 @@
+From d46d428f73c7e4511e72b5a70512348b74875e03 Mon Sep 17 00:00:00 2001
+From: Misaki Kasumi <misakikasumi@outlook.com>
+Date: Fri, 19 Apr 2024 16:26:05 +0800
+Subject: [PATCH] Revert "ao_coreaudio: signal buffer underruns"
+
+This reverts commit 0341a6f1d39801160322d3fe16245f8387735f4b.
+Fixes #13348.
+---
+ audio/out/ao_coreaudio.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/audio/out/ao_coreaudio.c b/audio/out/ao_coreaudio.c
+index ae743c90b205..b170d393c5e9 100644
+--- a/audio/out/ao_coreaudio.c
++++ b/audio/out/ao_coreaudio.c
+@@ -89,14 +89,7 @@ static OSStatus render_cb_lpcm(void *ctx, AudioUnitRenderActionFlags *aflags,
+ 
+     int64_t end = mp_time_ns();
+     end += p->hw_latency_ns + ca_get_latency(ts) + ca_frames_to_ns(ao, frames);
+-    int samples = ao_read_data(ao, planes, frames, end);
+-
+-    if (samples == 0)
+-        *aflags |= kAudioUnitRenderAction_OutputIsSilence;
+-
+-    for (int n = 0; n < buffer_list->mNumberBuffers; n++)
+-        buffer_list->mBuffers[n].mDataByteSize = samples * ao->sstride;
+-
++    ao_read_data(ao, planes, frames, end);
+     return noErr;
+ }
+ 
