@@ -35,6 +35,18 @@ desc "Media player based on MPlayer and mplayer2"
   # depends_on "vapoursynth"
   depends_on "yt-dlp"
 
+  stable do
+    patch do
+      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/13348.patch"
+      sha256 "f73b5e68ea31d69beb3163b2a19801e9aeb730196483f002622a8184df53eaa9"
+    end
+
+    patch do
+      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14092.patch"
+      sha256 "5f67187ec7474cece4a0aabb9c7f484d4553c1782e61c6e708600c97eaac863f"
+    end
+  end
+
   def install
     # LANG is unset by default on macOS and causes issues when calling getlocale
     # or getdefaultlocale in docutils. Force the default c/posix locale since
