@@ -1,11 +1,11 @@
-# Last check with upstream: 08af13cb54d88574e61985ea2ab479d7d85f89ab
-# https://github.com/Homebrew/homebrew-core/blob/master/Formula/ffmpeg.rb
+# Last check with upstream: 042325cd385225e055e2ccf676abe0072cd38dcb <ffmpeg: update 6.0_2 bottle>
+# https://github.com/Homebrew/homebrew-core/blob/master/Formula/f/ffmpeg.rb
 
 class FfmpegIina < Formula
   desc "Play, record, convert, and stream audio and video"
   homepage "https://ffmpeg.org/"
-  url "https://ffmpeg.org/releases/ffmpeg-6.0.tar.xz"
-  sha256 "57be87c22d9b49c112b6d24bc67d42508660e6b718b3db89c44e47e289137082"
+  url "https://ffmpeg.org/releases/ffmpeg-7.0.1.tar.xz"
+  sha256 "bce9eeb0f17ef8982390b1f37711a61b4290dc8c2a0c1a37b5857e85bfb0e4ff"
   head "https://github.com/FFmpeg/FFmpeg.git", branch: "master"
 
   keg_only <<EOS
@@ -30,7 +30,7 @@ EOS
   depends_on "xz"
   depends_on "zeromq"
   depends_on "zimg"
-  # depends_on "jpeg-xl" # for JPEG-XL format screenshot
+  depends_on "jpeg-xl" # for JPEG-XL format screenshot
   depends_on "webp" # for webp format screenshot
 
   on_intel do
@@ -67,9 +67,12 @@ EOS
       --enable-libspeex
       --enable-libsoxr
       --enable-videotoolbox
+      --enable-audiotoolbox
       --enable-libzmq
       --enable-libzimg
       --enable-libwebp
+      --enable-libjxl
+      --enable-libuavs3d
       --disable-libjack
       --disable-indev=jack
       --disable-programs
