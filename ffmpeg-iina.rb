@@ -72,13 +72,12 @@ EOS
       --enable-libzimg
       --enable-libwebp
       --enable-libjxl
-      --enable-libuavs3d
       --disable-libjack
       --disable-indev=jack
       --disable-programs
     ]
 
-    args << "--enable-neon --cc=gcc" if Hardware::CPU.arm?
+    args << "--enable-neon" if Hardware::CPU.arm?
     args << "--cc=#{ENV.cc}" if Hardware::CPU.intel?
 
     system "./configure", *args
