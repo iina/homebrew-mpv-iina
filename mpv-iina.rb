@@ -36,7 +36,7 @@ desc "Media player based on MPlayer and mplayer2"
   depends_on "yt-dlp"
 
   stable do
-    patch :DATA
+    # patch :DATA
 
     patch do
       url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/13348.patch"
