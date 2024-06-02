@@ -58,10 +58,6 @@ desc "Media player based on MPlayer and mplayer2"
       -Dlibbluray=enabled
       -Dcplayer=false
 
-      -Dswift-build=disabled
-      -Dmacos-cocoa-cb=disabled
-      -Dmacos-media-player=disabled
-      -Dmacos-touchbar=disabled
       -Dmanpage-build=disabled
 
       --sysconfdir=#{pkgetc}
