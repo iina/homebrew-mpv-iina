@@ -30,7 +30,7 @@ EOS
   depends_on "xz"
   depends_on "zeromq"
   depends_on "zimg"
-  depends_on "jpeg-xl" # for JPEG-XL format screenshot
+  # depends_on "jpeg-xl" # for JPEG-XL format screenshot
   depends_on "webp" # for webp format screenshot
 
   on_intel do
