@@ -79,6 +79,7 @@ desc "Media player based on MPlayer and mplayer2"
 
       -Dmanpage-build=disabled
 
+      -Dswift-build=disabled
       -Dmacos-cocoa-cb=disabled
       -Dmacos-media-player=disabled
       -Dmacos-touchbar=disabled
