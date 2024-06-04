@@ -26,7 +26,7 @@ desc "Media player based on MPlayer and mplayer2"
   depends_on "libsamplerate"
   depends_on "vulkan-loader"
   depends_on "zimg"
-  depends_on "molten-vk"
+ # depends_on "molten-vk"
 
   uses_from_macos "zlib"
 
@@ -46,6 +46,11 @@ desc "Media player based on MPlayer and mplayer2"
     patch do
       url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14092.patch"
       sha256 "5f67187ec7474cece4a0aabb9c7f484d4553c1782e61c6e708600c97eaac863f"
+    end
+
+    patch do
+      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14229.patch"
+      sha256 "aa5cbc43a8fb6ac8cf89560ab02924602971e80a9a42ec3d72bcebfa7deb0e0e"
     end
   end
 
