@@ -83,6 +83,7 @@ desc "Media player based on MPlayer and mplayer2"
       -Dmacos-cocoa-cb=disabled
       -Dmacos-media-player=disabled
       -Dmacos-touchbar=disabled
+      -Davfoundation=disabled
 
       --sysconfdir=#{pkgetc}
       --datadir=#{pkgshare}
