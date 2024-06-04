@@ -1,0 +1,37 @@
+diff --git a/osdep/mac/app_bridge.m b/osdep/mac/app_bridge.m
+index bf39efe603..6b99d96177 100644
+--- a/osdep/mac/app_bridge.m
++++ b/osdep/mac/app_bridge.m
+@@ -93,27 +93,27 @@ const struct m_sub_options *app_bridge_vo_conf(void)
+ 
+ void cocoa_init_media_keys(void)
+ {
+-    [[AppHub shared] startRemote];
++    return;
+ }
+ 
+ void cocoa_uninit_media_keys(void)
+ {
+-    [[AppHub shared] stopRemote];
++    return;
+ }
+ 
+ void cocoa_set_input_context(struct input_ctx *input_context)
+ {
+-    [[AppHub shared] initInput:input_context];
++    return;
+ }
+ 
+ void cocoa_set_mpv_handle(struct mpv_handle *ctx)
+ {
+-    [[AppHub shared] initMpv:ctx];
++    return;
+ }
+ 
+ void cocoa_init_cocoa_cb(void)
+ {
+-    [[AppHub shared] initCocoaCb];
++    return;
+ }
+ 
+ int cocoa_main(int argc, char *argv[])

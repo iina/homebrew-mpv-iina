@@ -52,6 +52,11 @@ desc "Media player based on MPlayer and mplayer2"
       url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14229.patch"
       sha256 "aa5cbc43a8fb6ac8cf89560ab02924602971e80a9a42ec3d72bcebfa7deb0e0e"
     end
+
+    patch do
+      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/disable-swift.patch"
+      sha256 "391674506aea158026dd9a3c6972a5b2855b2c30cde1b0f4ee19b95d53f03ed8"
+    end
   end
 
   def install
