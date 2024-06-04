@@ -71,11 +71,12 @@ EOS
       --enable-libzmq
       --enable-libzimg
       --enable-libwebp
-      --enable-libjxl
       --disable-libjack
       --disable-indev=jack
       --disable-programs
     ]
+    # --enable-libjxl
+
 
     args << "--enable-neon" if Hardware::CPU.arm?
     args << "--cc=#{ENV.cc}" if Hardware::CPU.intel?
