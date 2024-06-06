@@ -4,9 +4,7 @@
 class MpvIina < Formula
 desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
-  url "https://github.com/mpv-player/mpv/archive/refs/tags/v0.38.0.tar.gz"
-  sha256 "86d9ef40b6058732f67b46d0bbda24a074fae860b3eaae05bab3145041303066"
-  head "https://github.com/mpv-player/mpv.git"
+  head "https://github.com/iina/mpv.git", :branch => "iina-release/1.4.0"
 
   keg_only "it is intended to only be used for building IINA. This formula is not recommended for daily use"
 
@@ -35,30 +33,6 @@ desc "Media player based on MPlayer and mplayer2"
   # depends_on "vapoursynth"
   depends_on "yt-dlp"
 
-  stable do
-    # patch :DATA
-
-    patch do
-      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/13348.patch"
-      sha256 "f73b5e68ea31d69beb3163b2a19801e9aeb730196483f002622a8184df53eaa9"
-    end
-
-    patch do
-      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14092.patch"
-      sha256 "5f67187ec7474cece4a0aabb9c7f484d4553c1782e61c6e708600c97eaac863f"
-    end
-
-    patch do
-      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/14229.patch"
-      sha256 "aa5cbc43a8fb6ac8cf89560ab02924602971e80a9a42ec3d72bcebfa7deb0e0e"
-    end
-
-    patch do
-      url "https://raw.githubusercontent.com/iina/homebrew-mpv-iina/master/other/disable-swift.patch"
-      sha256 "391674506aea158026dd9a3c6972a5b2855b2c30cde1b0f4ee19b95d53f03ed8"
-    end
-  end
-
   def install
     # LANG is unset by default on macOS and causes issues when calling getlocale
     # or getdefaultlocale in docutils. Force the default c/posix locale since
@@ -83,12 +57,6 @@ desc "Media player based on MPlayer and mplayer2"
       -Dcplayer=false
 
       -Dmanpage-build=disabled
-
-      -Dswift-build=disabled
-      -Dmacos-cocoa-cb=disabled
-      -Dmacos-media-player=disabled
-      -Dmacos-touchbar=disabled
-      -Davfoundation=disabled
 
       --sysconfdir=#{pkgetc}
       --datadir=#{pkgshare}
