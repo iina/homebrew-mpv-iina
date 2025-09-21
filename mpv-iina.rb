@@ -4,7 +4,7 @@
 class MpvIina < Formula
 desc "Media player based on MPlayer and mplayer2"
   homepage "https://mpv.io"
-  head "https://github.com/iina/mpv.git", :branch => "iina-release/1.4.0"
+  head "https://github.com/iina/mpv.git", :branch => "iina-release/1.5.0"
 
   keg_only "it is intended to only be used for building IINA. This formula is not recommended for daily use"
 
