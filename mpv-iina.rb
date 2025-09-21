@@ -10,7 +10,8 @@ desc "Media player based on MPlayer and mplayer2"
 
   depends_on "docutils" => :build
   depends_on "meson" => :build
-  depends_on "pkg-config" => [:build, :test]
+  depends_on "ninja" => :build
+  depends_on "pkgconf" => [:build, :test]
   depends_on xcode: :build
 
   depends_on "ffmpeg-iina"
@@ -25,13 +26,16 @@ desc "Media player based on MPlayer and mplayer2"
   depends_on "vulkan-loader"
   depends_on "zimg"
  # depends_on "molten-vk"
-
-  uses_from_macos "zlib"
-
   depends_on "mujs"
   depends_on "uchardet"
   # depends_on "vapoursynth"
   depends_on "yt-dlp"
+
+  uses_from_macos "zlib"
+
+  on_ventura :or_older do
+    depends_on "lld" => :build
+  end
 
   def install
     # LANG is unset by default on macOS and causes issues when calling getlocale
@@ -44,6 +48,15 @@ desc "Media player based on MPlayer and mplayer2"
 
     # libarchive is keg-only
     ENV.prepend_path "PKG_CONFIG_PATH", Formula["libarchive"].opt_lib/"pkgconfig"
+
+    # Work around https://github.com/mpv-player/mpv/issues/15591
+    # This bug happens running classic ld, which is the default
+    # prior to Xcode 15 and we enable it in the superenv prior to
+    # Xcode 15.3 when using -dead_strip_dylibs (default for meson).
+    if OS.mac? && MacOS.version <= :ventura
+      ENV.append "LDFLAGS", "-fuse-ld=lld"
+      ENV.O1 # -Os is not supported for lld and we don't have ENV.O2
+    end
 
     args = %W[
       -Dhtml-build=disabled
@@ -83,7 +96,7 @@ desc "Media player based on MPlayer and mplayer2"
 
   test do
     system bin/"mpv", "--ao=null", test_fixtures("test.wav")
-    # Make sure `pkg-config` can parse `mpv.pc` after the `inreplace`.
-    system "pkg-config", "mpv"
+    # Make sure `pkgconf` can parse `mpv.pc` after the `inreplace`.
+    system "pkgconf", "--print-errors", "mpv"
   end
 end
