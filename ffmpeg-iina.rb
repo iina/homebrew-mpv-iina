@@ -1,4 +1,4 @@
-# Last check with upstream: 042325cd385225e055e2ccf676abe0072cd38dcb <ffmpeg: update 6.0_2 bottle>
+# Last check with upstream: 2452fa502ded1f3503593384f3ca972d4edebeda <ffmpeg: update 8.0_1 bottle>
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/f/ffmpeg.rb
 
 class FfmpegIina < Formula
@@ -56,11 +56,11 @@ EOS
       --host-ldflags=#{ENV.ldflags}
       --enable-ffplay
       --enable-gnutls
-      --enable-harfbuzz
+      --enable-libharfbuzz
       --enable-gpl
       --enable-libbluray
       --enable-libdav1d
-      --enable-librav1
+      --enable-librav1e
       --enable-librubberband
       --enable-libsnappy
       --enable-libssh

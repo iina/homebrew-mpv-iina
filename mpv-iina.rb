@@ -1,4 +1,4 @@
-# Last check with upstream: 03fb1acf8d1c5417b8079eb68b2104a1296bc665
+# Last check with upstream: 0c8840fc00831e56bcd63c6f06962c13504f0c68 (mpv: remove lld workaround)
 # https://github.com/Homebrew/homebrew-core/blob/master/Formula/m/mpv.rb
 
 class MpvIina < Formula
