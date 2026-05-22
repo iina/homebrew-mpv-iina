@@ -20,6 +20,7 @@ EOS
   depends_on "frei0r"
   depends_on "gnutls"
   depends_on "harfbuzz"
+  depends_on "libaribcaption" # for ARIB STD-B24 caption decoding
   depends_on "libass"
   depends_on "libbluray"
   depends_on "libsoxr"
@@ -70,6 +71,7 @@ EOS
       --enable-libfontconfig
       --enable-libfreetype
       --enable-frei0r
+      --enable-libaribcaption
       --enable-libass
       --enable-libspeex
       --enable-libsoxr
