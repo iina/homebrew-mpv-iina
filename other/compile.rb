@@ -28,7 +28,7 @@ def fetch(package)
 end
 
 def livecheck(package)
-  splitted = `brew livecheck rubberband`.split(/:|==>/).map { |x| x.strip }
+  splitted = `brew livecheck #{package}`.split(/:|==>/).map { |x| x.strip }
   splitted[1] == splitted[2]
 end
 
@@ -73,7 +73,5 @@ begin
   end
 
   install "mpv-iina", head: $install_head
-
-ensure
-  reset
+  
 end
