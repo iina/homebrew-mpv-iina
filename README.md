@@ -1,3 +1,5 @@
+### This repo is no longer maintained. From IINA 1.5.0, the dependencies are compiled using https://github.com/iina/deps-buildscripts.
+
 # mpv homebrew tap for IINA
 
 This repo contains custom mpv and ffmpeg homebrew tap for IINA.
